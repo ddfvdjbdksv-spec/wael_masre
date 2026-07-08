@@ -9,7 +9,7 @@
 //    5. أو: يُطبَّق تلقائياً بعد 10 ثوانٍ بدون تدخّل
 // ============================================================
 
-const CACHE_VERSION = 'markaz-mohamed-saad-doweidar-pwa-v15';
+const CACHE_VERSION = 'markaz-wael-masry-pwa-v16';
 
 const APP_SHELL = [
   './',
@@ -28,13 +28,23 @@ const APP_SHELL = [
   './apple-touch-icon.png'
 ];
 
+// مكتبات خارجية (CDN) — تُخزَّن مسبقاً وقت التثبيت لضمان عملها أوفلاين
+// فوراً من أول تشغيل، بدلاً من انتظار أول استخدام ناجح لها أونلاين
+const EXTERNAL_LIBS = [
+  'https://unpkg.com/html5-qrcode',
+  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
+  'https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  'https://cdn.jsdelivr.net/npm/chart.js'
+];
+
 // ─── Install: تحميل كل ملفات الـ App Shell في الـ Cache ───
 self.addEventListener('install', (event) => {
   console.log(`[SW] Installing version: ${CACHE_VERSION}`);
   event.waitUntil(
     caches.open(CACHE_VERSION)
       .then((cache) => Promise.all(
-        APP_SHELL.map((url) =>
+        [...APP_SHELL, ...EXTERNAL_LIBS].map((url) =>
           cache.add(url).catch((err) => {
             console.warn('[SW] Failed to cache:', url, err);
             return null;

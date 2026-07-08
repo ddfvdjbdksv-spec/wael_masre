@@ -3372,10 +3372,10 @@
             </div>
         </div>
 
-        <script src="https://unpkg.com/html5-qrcode"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://unpkg.com/html5-qrcode" onerror="console.warn('html5-qrcode not available offline')"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" onerror="console.warn('qrcodejs not available offline')"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js" onerror="console.warn('JsBarcode not available offline')"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" onerror="console.warn('html2canvas not available offline')"></script>
         <!-- Data file - must be loaded BEFORE app.js -->
         <script src="data.js?v=3" onerror="console.warn('data.js not found - fresh install mode');"></script>
         <script src="code-generator.js"></script>
