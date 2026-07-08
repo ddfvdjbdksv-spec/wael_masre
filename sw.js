@@ -9,7 +9,7 @@
 //    5. أو: يُطبَّق تلقائياً بعد 10 ثوانٍ بدون تدخّل
 // ============================================================
 
-const CACHE_VERSION = 'markaz-wael-masry-pwa-v16';
+const CACHE_VERSION = 'markaz-wael-masry-pwa-v17';
 
 const APP_SHELL = [
   './',
@@ -94,7 +94,12 @@ self.addEventListener('activate', (event) => {
 // ─── Fetch: Cache-First للـ Shell، Network-First للباقي ───
 async function cacheFirst(request) {
   const cache = await caches.open(CACHE_VERSION);
-  const cached = await cache.match(request);
+  // ✅ إصلاح: تجاهل الـ query string (?v=N) عند المطابقة، لأن الملفات
+  // اتخزنت بدون ?v= وقت install لكن بتتطلب فعليًا بـ ?v= من index.html
+  // (مثال: app.js?v=7) — بدون ignoreSearch الطلب مكنش بيتطابق مع الكاش
+  // فيضطر يروح للشبكة، ولو أوفلاين كان بيفشل بالكامل (ده كان سبب تعطل
+  // تسجيل الدخول أوفلاين لأن app.js كان بيفشل في التحميل).
+  const cached = await cache.match(request, { ignoreSearch: true });
   if (cached) return cached;
   try {
     const fresh = await fetch(request, { cache: 'no-store' });
@@ -113,7 +118,8 @@ async function networkFirst(request) {
     if (fresh && fresh.ok) await cache.put(request, fresh.clone());
     return fresh;
   } catch (error) {
-    const cached = await cache.match(request);
+    // نفس إصلاح تجاهل الـ query string هنا كمان
+    const cached = await cache.match(request, { ignoreSearch: true });
     if (cached) return cached;
     if (request.mode === 'navigate') return cache.match('./index.html');
     throw error;
